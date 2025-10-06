@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <title>Gameshow — Admin</title>
+  <style>
+    body{margin:0;font-family:sans-serif;background:#0a0710;color:#d1c9ff}
+    header{padding:20px;background:#120c1f;color:#4219e5;text-align:center}
+    .controls{max-width:600px;margin:20px auto;text-align:center}
+    button{margin:5px;padding:10px 20px;border-radius:8px;border:none;background:#241b36;color:#d1c9ff;cursor:pointer}
+    .spieler{margin:10px 0}
+    .spieler span{margin:0 10px;font-weight:bold;color:#9f86ff}
+  </style>
+</head>
+<body>
+  <header><h1>Admin</h1></header>
+
+  <div class="controls">
+    <button id="init">Init</button>
+    <button id="prev">◀ Zurück</button>
+    <button id="next">Weiter ▶</button>
+    <button id="reveal">Aufdecken</button>
+    <button id="switchShow">Show wechseln</button>      
+
+    <h3>Punkte</h3>
+    <div class="spieler" data-i="0">Spieler 1 <button class="minus">-</button><span id="ps0">0</span><button class="plus">+</button></div>
+    <div class="spieler" data-i="1">Spieler 2 <button class="minus">-</button><span id="ps1">0</span><button class="plus">+</button></div>
+    <div class="spieler" data-i="2">Spieler 3 <button class="minus">-</button><span id="ps2">0</span><button class="plus">+</button></div>
+    <div class="spieler" data-i="3">Spieler 4 <button class="minus">-</button><span id="ps3">0</span><button class="plus">+</button></div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+    import { getFirestore, doc, getDoc, setDoc, updateDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyA12xVYrWgvIPmPi4dvpjYwlkopmz-CrSA",
+      authDomain: "pssst-ba817.firebaseapp.com",
+      projectId: "pssst-ba817",
+      storageBucket: "pssst-ba817.firebasestorage.app",
+      messagingSenderId: "182141979805",
+      appId: "1:182141979805:web:d85619677fe2804e811874"
+    };
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const docRef = doc(db,"games","current");
+
+    const btnInit=document.getElementById("init");
+    const btnNext=document.getElementById("next");
+    const btnPrev=document.getElementById("prev");
+    const btnReveal=document.getElementById("reveal");
+    const btnSwitch=document.getElementById("switchShow");
+    const players=[...document.querySelectorAll(".spieler")];
+
+    btnInit.onclick=async()=>{
+      const snap=await getDoc(docRef);
+      if(snap.exists()){alert("Schon initialisiert");return;}
+      await setDoc(docRef,{
+        questionIndex:0,
+        revealed:false,
+        scores:[0,0,0,0],
+        roundName:"1",
+        fakeState:1, // Start bei Willkommen
+        questions:[
+          {text:"Frage 1: Hauptstadt von Frankreich?",answer:"Paris"},
+          {text:"Frage 2: 2+2=?",answer:"4"},
+          {text:"Frage 3: Farbe des Himmels?",answer:"Blau"}
+        ]
+      });
+      alert("Initialisiert!");
+    };
+
+    btnNext.onclick=()=>changeQuestion(1);
+    btnPrev.onclick=()=>changeQuestion(-1);
+    btnReveal.onclick=async()=>{
+      const snap=await getDoc(docRef);
+      if(snap.exists()) await updateDoc(docRef,{revealed:!snap.data().revealed});
+    };
+
+    // ---- Klick für jeden Schritt ----
+    btnSwitch.onclick=async()=>{
+      const snap = await getDoc(docRef);
+      if(!snap.exists()) return;
+      let state = snap.data().fakeState || 1;
+      state++;
+      if(state>4) state=1; // 1=Willkommen,2=Hacker,3=Intro,4=Normale Show
+      await updateDoc(docRef,{fakeState:state});
+    };
+
+    async function changeQuestion(d){
+      const snap=await getDoc(docRef);
+      if(!snap.exists())return;
+      const data=snap.data();
+      let idx=data.questionIndex+d;
+      if(idx<0)idx=0;
+      if(idx>=data.questions.length)idx=data.questions.length-1;
+      await updateDoc(docRef,{questionIndex:idx,revealed:false,roundName:String(idx+1)});
+    }
+
+    async function changeScore(i,diff){
+      const snap=await getDoc(docRef);
+      if(!snap.exists())return;
+      const s=[...snap.data().scores];
+      s[i]+=diff;
+      await updateDoc(docRef,{scores:s});
+    }
+
+    players.forEach(p=>{
+      const i=+p.dataset.i;
+      p.querySelector(".plus").onclick=()=>changeScore(i,1);
+      p.querySelector(".minus").onclick=()=>changeScore(i,-1);
+    });
+
+    onSnapshot(docRef,snap=>{
+      if(!snap.exists())return;
+      snap.data().scores.forEach((v,i)=>{
+        document.getElementById("ps"+i).textContent=v;
+      });
+    });
+  </script>
+</body>
+</html>

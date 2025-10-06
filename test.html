@@ -1,0 +1,301 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>Gameshow — Teilnehmer</title>
+<style>
+html, body {
+  margin:0;
+  padding:0;
+  width:100%;
+  height:100%;
+  overflow:hidden;
+  font-family:'Segoe UI',sans-serif;
+  background:#0a0612;
+  color:#e0caff;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+
+/* Wrapper für skalierte Stage */
+.stage-wrapper {
+  width:1000px;
+  height:600px;
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform-origin:center center;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+.stage {
+  width:1000px;
+  height:600px;
+  display:grid;
+  grid-template-rows:250px 220px;
+  gap:40px;
+  position:relative;
+}
+
+/* Top Container */
+.top {
+  display:grid;
+  grid-template-columns:1fr auto 1fr;
+  align-items:start;
+  gap:20px;
+}
+
+/* Frage Box */
+.frage-box {
+  background:#1a0d2e;
+  color:#c6a8ff;
+  border-radius:35px;
+  width:400px;
+  height:200px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  font-size:2rem;
+  text-align:center;
+  padding:20px;
+  transition: all 0.5s ease;
+}
+.frage-box.shrink { font-size:1.2rem; }
+.frage-box .answer {
+  margin-top:10px;
+  font-size:1.8rem;
+  color:#9f86ff;
+  opacity:0;
+  animation: fadeInGlow 1s forwards, pulseGlow 2s infinite alternate;
+  text-shadow:0 0 8px #9f86ff,0 0 12px #b58cff;
+}
+@keyframes fadeInGlow { from{opacity:0; transform:scale(0.9);} to{opacity:1; transform:scale(1);} }
+@keyframes pulseGlow {0%{text-shadow:0 0 8px #9f86ff,0 0 12px #b58cff;} 100%{text-shadow:0 0 16px #9f86ff,0 0 24px #b58cff;}}
+
+/* Runde */
+.runde {
+  background:#000;
+  color:#c6a8ff;
+  padding:10px 25px;
+  border-radius:25px;
+  font-size:1.2rem;
+  justify-self:center;
+  align-self:center;
+}
+
+/* Mod Box */
+.mod-box {
+  background:#6a4c8d;
+  border-radius:25px;
+  width:240px;
+  height:180px;
+  position:absolute;
+  top:0;
+  right:0;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+.mod-label {
+  background:#fff;
+  color:#9f86ff;
+  padding:6px 20px;
+  border-radius:20px;
+  position:absolute;
+  bottom:-20px;
+  left:50%;
+  transform:translateX(-50%);
+  font-weight:bold;
+}
+
+/* Spieler Grid */
+.spieler-grid {
+  display:grid;
+  grid-template-columns:repeat(4, 1fr);
+  gap:20px;
+}
+.spieler {
+  background:#6a4c8d;
+  border-radius:25px;
+  height:160px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  position:relative;
+  padding:10px;
+  color:#9f86ff;
+}
+.spieler-info {
+  display:flex;
+  align-items:center;
+  gap:10px;
+  background:#fff;
+  color:#fa0c9e;
+  border-radius:20px;
+  padding:6px 12px;
+  font-weight:bold;
+  font-size:0.95rem;
+  margin-top:195px;
+}
+
+/* Overlay */
+#fakeOverlay {
+  position:absolute;
+  inset:0;
+  background:#220022;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-size:3rem;
+  text-align:center;
+  z-index:1000;
+  color:#ff6699;
+  transition:opacity 0.5s ease;
+}
+
+/* Hacker Screen */
+.hackerScreen {
+  background:#000;
+  flex-direction:column;
+  color:#0f0;
+  font-size:2rem;
+}
+.matrix {
+  position:absolute;
+  inset:0;
+  color:#0f0;
+  font-family:monospace;
+  font-size:18px;
+  opacity:0.2;
+  white-space:pre;
+  pointer-events:none;
+  animation: scrollMatrix 6s linear infinite;
+}
+@keyframes scrollMatrix { from {transform:translateY(-100%);} to {transform:translateY(100%);} }
+.warning { font-size:8rem; color:yellow; text-shadow:0 0 20px yellow,0 0 40px orange; margin-bottom:40px; }
+.warn-text { font-size:2rem; color:red; text-shadow:0 0 5px red,0 0 10px darkred; margin-bottom:20px; }
+.loading { font-size:1.5rem; color:red; font-family:monospace; margin-top:15px; }
+
+/* Intro Screen */
+.introScreen { background:#04fb9c; flex-direction:column; color:#04fb9c; font-size:3rem; text-align:center; }
+.intro-title { font-size:4rem; margin-bottom:30px; text-shadow:0 0 10px #8c04fb,0 0 20px #8c04fb; }
+.intro-sub { font-size:2rem; color:#824cae; }
+</style>
+</head>
+<body>
+
+<div id="fakeOverlay">Are you Ready for it?</div>
+
+<div class="stage-wrapper">
+  <div class="stage">
+    <div class="top">
+      <div class="frage-box" id="frage"><div class="question">FRAGEN</div></div>
+      <div class="runde">Runde: <span id="runde">XY</span></div>
+    </div>
+
+    <div class="mod-box"><div class="mod-label">Neneli</div></div>
+
+    <div class="spieler-grid">
+      <div class="spieler"><div class="spieler-info"><span>Nele</span><span class="score" id="s0">0</span></div></div>
+      <div class="spieler"><div class="spieler-info"><span>Vullco</span><span class="score" id="s1">0</span></div></div>
+      <div class="spieler"><div class="spieler-info"><span>Paya</span><span class="score" id="s2">0</span></div></div>
+      <div class="spieler"><div class="spieler-info"><span>Lian</span><span class="score" id="s3">0</span></div></div>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+import { getFirestore, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyA12xVYrWgvIPmPi4dvpjYwlkopmz-CrSA",
+  authDomain: "pssst-ba817.firebaseapp.com",
+  projectId: "pssst-ba817",
+  storageBucket: "pssst-ba817.firebasestorage.app",
+  messagingSenderId: "182141979805",
+  appId: "1:182141979805:web:d85619677fe2804e811874"
+};
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+const stageWrapper = document.querySelector(".stage-wrapper");
+const frage=document.getElementById("frage");
+const runde=document.getElementById("runde");
+const questionDiv=frage.querySelector(".question");
+const fakeOverlay=document.getElementById("fakeOverlay");
+
+// proportional skalieren
+function scaleStage(){
+  const scale = Math.min(window.innerWidth/1000, window.innerHeight/600);
+  stageWrapper.style.transform = `translate(-50%, -50%) scale(${scale})`;
+}
+window.addEventListener("resize", scaleStage);
+scaleStage();
+
+function buildHackerScreen(){
+  fakeOverlay.className="hackerScreen";
+  fakeOverlay.innerHTML=`
+    <div class="matrix" id="matrix"></div>
+    <div class="warning">⚠</div>
+    <div class="warn-text">SYSTEM ERROR</div>
+    <div class="loading">Loading<span id="dots"></span></div>
+  `;
+  const matrix=document.getElementById("matrix");
+  const dots=document.getElementById("dots");
+  setInterval(()=>{
+    let txt="";
+    for(let r=0;r<60;r++){
+      for(let c=0;c<100;c++) txt+=Math.random()>0.9?Math.floor(Math.random()*10):" ";
+      txt+="\n";
+    }
+    matrix.textContent=txt;
+  },150);
+  let dotCount=0;
+  setInterval(()=>{ dotCount=(dotCount+1)%4; dots.textContent=".".repeat(dotCount); },300);
+}
+
+function buildIntroScreen(){
+  fakeOverlay.className="introScreen";
+  fakeOverlay.innerHTML=`
+    <div class="intro-title">Wer kennt Nico am besten?</div>
+    <div class="intro-sub">Are you NOW Ready for it?..</div>
+  `;
+}
+
+// Daten aus Firestore
+onSnapshot(doc(db,"games","current"),snap=>{
+  if(!snap.exists()) return;
+  const d = snap.data();
+  const state=d.fakeState||1;
+
+  if(state===1){
+    fakeOverlay.className=""; fakeOverlay.style.opacity=1; fakeOverlay.textContent="Are you Ready for it...?"; frage.style.opacity=0;
+  }else if(state===2){
+    if(!fakeOverlay.classList.contains("hackerScreen")) buildHackerScreen();
+    fakeOverlay.style.opacity=1; frage.style.opacity=0;
+  }else if(state===3){
+    buildIntroScreen(); fakeOverlay.style.opacity=1; frage.style.opacity=0;
+  }else{
+    fakeOverlay.style.opacity=0; frage.style.opacity=1;
+    const q=d.questions[d.questionIndex]||{};
+    if(d.revealed){
+      frage.classList.add("shrink"); questionDiv.style.fontSize="1.2rem";
+      if(!frage.querySelector(".answer")){
+        const ans=document.createElement("div"); ans.className="answer"; ans.textContent=q.answer||"Keine Antwort"; frage.appendChild(ans);
+      } else frage.querySelector(".answer").textContent=q.answer||"Keine Antwort";
+    } else {
+      frage.classList.remove("shrink"); questionDiv.style.fontSize="2rem"; questionDiv.textContent=q.text||"Keine Frage mehr.";
+      const ans=frage.querySelector(".answer"); if(ans) ans.remove();
+    }
+    runde.textContent=d.roundName||d.questionIndex+1;
+    (d.scores||[]).forEach((v,i)=>document.getElementById("s"+i).textContent=v);
+  }
+});
+</script>
+</body>
+</html>
