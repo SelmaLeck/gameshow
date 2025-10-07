@@ -117,23 +117,6 @@ html, body {
   margin-top:195px;
 }
 
-/* ---- Overlay States ---- */
-#fakeOverlay {
-  position:absolute;
-  inset:0;
-  background:#220022;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  font-size:3rem;
-  text-align:center;
-  z-index:1000;
-  opacity:1;
-  pointer-events:auto;
-  transition:opacity 0.5s ease;
-  color:#ff6699;
-}
-
 /* Kameras Container */
 .kameras {
   position:absolute;
@@ -141,12 +124,11 @@ html, body {
   pointer-events:none;
   z-index:10;
 }
-.cam-box {
+.kameras div {
   position:absolute;
+  border:2px solid #9f86ff;
   border-radius:12px;
   overflow:hidden;
-  border:2px solid #9f86ff;
-  background:#d8b6ff; /* hell-lila Orientierung */
 }
 .kameras iframe {
   width:100%;
@@ -154,64 +136,13 @@ html, body {
   border:none;
 }
 
-/* Jede Cam über dem Spieler / Moderator */
-#cam1 { top:50px; left:60px; width:200px; height:150px; }   /* Nele */
-#cam2 { top:50px; left:380px; width:200px; height:150px; }  /* Vullco */
-#cam3 { top:50px; left:700px; width:200px; height:150px; }  /* Paya */
-#cam4 { top:50px; left:1020px; width:200px; height:150px; } /* Lian */
-#cam5 { top:10px; right:50px; width:200px; height:150px; }  /* Neneli / Bonuscam */
+/* Jede Cam über dem jeweiligen Spieler */
+#cam1 { top:50px; left:calc(0% + 50px); width:200px; height:150px; }  /* Nele */
+#cam2 { top:50px; left:calc(25% + 50px); width:200px; height:150px; } /* Vullco */
+#cam3 { top:50px; left:calc(50% + 50px); width:200px; height:150px; } /* Paya */
+#cam4 { top:50px; left:calc(75% + 50px); width:200px; height:150px; } /* Lian */
+#cam5 { top:10px; right:50px; width:200px; height:150px; }             /* Bonuscam / Moderator */
 
-/* Antwort Animation */
-.answer {
-  font-size:1.8rem;
-  color:#9f86ff;
-  margin-top:10px;
-  opacity:0;
-  animation: fadeInGlow 1s forwards, pulseGlow 2s infinite alternate;
-  text-shadow:0 0 8px #9f86ff,0 0 12px #b58cff;
-}
-@keyframes fadeInGlow{from{opacity:0;transform: scale(0.9);}to{opacity:1;transform: scale(1);} }
-@keyframes pulseGlow{0%{text-shadow:0 0 8px #9f86ff,0 0 12px #b58cff;}100%{text-shadow:0 0 16px #9f86ff,0 0 24px #b58cff;}}
-
-/* Intro / Hacker Screen Styles */
-.hackerScreen {
-  background:#000!important;
-  flex-direction:column;
-  color:#0f0;
-  font-size:2rem;
-  overflow:hidden;
-}
-.matrix {
-  position:absolute;
-  inset:0;
-  color:#0f0;
-  font-family:monospace;
-  font-size:18px;
-  opacity:0.2;
-  white-space:pre;
-  pointer-events:none;
-  animation: scrollMatrix 6s linear infinite;
-  mix-blend-mode:screen;
-}
-@keyframes scrollMatrix{from{transform:translateY(-100%);}to{transform:translateY(100%);}}
-
-/* Intro Screen */
-.introScreen {
-  background:#04fb9c;
-  flex-direction:column;
-  color:#04fb9c;
-  font-size:3rem;
-  text-align:center;
-}
-.intro-title {
-  font-size:4rem;
-  margin-bottom:30px;
-  text-shadow:0 0 10px #8c04fb,0 0 20px #8c04fb;
-}
-.intro-sub {
-  font-size:2rem;
-  color:#824cae;
-}
 </style>
 </head>
 <body>
@@ -239,22 +170,27 @@ html, body {
   </div>
 </div>
 
-<!-- Kameras über Spielern und auf Fake-Screens -->
+<!-- 5 getrennte Kameras über Spielern -->
 <div class="kameras">
-  <div id="cam1" class="cam-box">
-    <iframe src="https://vdo.ninja/?view=Kamera1&room=topappleW&viewonly=true&quality=1080&fps=30&autoplay=true" allow="autoplay; fullscreen"></iframe>
+  <div id="cam1">
+    <iframe src="https://vdo.ninja/?view=Kamera1&room=topappleW&viewonly=true&quality=1080&fps=30&autoplay=true"
+            allow="autoplay; fullscreen"></iframe>
   </div>
-  <div id="cam2" class="cam-box">
-    <iframe src="https://vdo.ninja/?view=Kamera2&room=topappleW&viewonly=true&quality=1080&fps=30&autoplay=true" allow="autoplay; fullscreen"></iframe>
+  <div id="cam2">
+    <iframe src="https://vdo.ninja/?view=Kamera2&room=topappleW&viewonly=true&quality=1080&fps=30&autoplay=true"
+            allow="autoplay; fullscreen"></iframe>
   </div>
-  <div id="cam3" class="cam-box">
-    <iframe src="https://vdo.ninja/?view=Kamera3&room=topappleW&viewonly=true&quality=1080&fps=30&autoplay=true" allow="autoplay; fullscreen"></iframe>
+  <div id="cam3">
+    <iframe src="https://vdo.ninja/?view=Kamera3&room=topappleW&viewonly=true&quality=1080&fps=30&autoplay=true"
+            allow="autoplay; fullscreen"></iframe>
   </div>
-  <div id="cam4" class="cam-box">
-    <iframe src="https://vdo.ninja/?view=Kamera4&room=topappleW&viewonly=true&quality=1080&fps=30&autoplay=true" allow="autoplay; fullscreen"></iframe>
+  <div id="cam4">
+    <iframe src="https://vdo.ninja/?view=Kamera4&room=topappleW&viewonly=true&quality=1080&fps=30&autoplay=true"
+            allow="autoplay; fullscreen"></iframe>
   </div>
-  <div id="cam5" class="cam-box">
-    <iframe src="https://vdo.ninja/?view=Kamera5&room=topappleW&viewonly=true&quality=1080&fps=30&autoplay=true" allow="autoplay; fullscreen"></iframe>
+  <div id="cam5">
+    <iframe src="https://vdo.ninja/?view=Kamera5&room=topappleW&viewonly=true&quality=1080&fps=30&autoplay=true"
+            allow="autoplay; fullscreen"></iframe>
   </div>
 </div>
 
@@ -296,16 +232,6 @@ onSnapshot(doc(db,"games","current"),snap=>{
   if(state===1){
     fakeOverlay.style.opacity="1";
     fakeOverlay.textContent="Are you Ready for it...?";
-    frage.style.opacity=0;
-  } else if(state===2){
-    // Hacker Screen
-    fakeOverlay.classList.add("hackerScreen");
-    fakeOverlay.style.opacity="1";
-    frage.style.opacity=0;
-  } else if(state===3){
-    // Intro Screen
-    fakeOverlay.classList.add("introScreen");
-    fakeOverlay.style.opacity="1";
     frage.style.opacity=0;
   } else {
     fakeOverlay.style.opacity="0";
