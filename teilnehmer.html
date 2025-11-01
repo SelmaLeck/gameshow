@@ -23,7 +23,7 @@ html, body{
   display:grid;
   grid-template-columns:1fr auto 1fr;
   align-items:start;
-  gap: 16px;
+  gap:16px;
 }
 
 /* Frage Box */
@@ -42,7 +42,7 @@ html, body{
   white-space: pre-line;
   padding:20px;
   transition: all 0.8s ease;
-  margin-bottom: 30px;
+  margin-bottom:30px;
 }
 .frage-box .question{transition: all 0.5s ease;}
 .frage-box.shrink .question{font-size:1.2rem;}
@@ -117,6 +117,55 @@ html, body{
   margin-top:195px;
 }
 
+/* Kameras Container */
+.kameras{
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  z-index:2000; /* über allen overlays */
+}
+.cam-box{
+  position:absolute;
+  border-radius:12px;
+  overflow:hidden;
+  border:2px solid #9f86ff;
+  background:#d8b6ff; /* hell-lila Orientierung */
+}
+.kameras iframe{
+  width:100%;
+  height:100%;
+  border:none;
+}
+/* Jede Cam über Spieler/Moderator */
+#cam1 { top:50px; left:60px; width:200px; height:150px; }
+#cam2 { top:50px; left:380px; width:200px; height:150px; }
+#cam3 { top:50px; left:700px; width:200px; height:150px; }
+#cam4 { top:50px; left:1020px; width:200px; height:150px; }
+#cam5 { top:10px; right:50px; width:200px; height:150px; }
+
+/* Push Buttons */
+.push-links{
+  position:absolute;
+  top:270px;
+  left:10px;
+  z-index:1001;
+  display:flex;
+  flex-direction:column;
+  gap:5px;
+}
+.push-links button{
+  padding:3px 6px;
+  font-size:1.3rem;
+  border-radius:6px;
+  border:none;
+  background:#9f86ff;
+  color:#fff;
+  cursor:pointer;
+}
+.push-links button:hover{
+  background:#b58cff;
+}
+
 /* Antwort Animation */
 .answer{
   font-size:1.8rem;
@@ -139,7 +188,7 @@ html, body{
   align-items:center;
   font-size:3rem;
   text-align:center;
-  z-index:1000;
+  z-index:1000; /* jetzt unter den cams */
   opacity:1;
   pointer-events:auto;
   transition:opacity 0.5s ease;
@@ -151,7 +200,7 @@ html, body{
   background:#000!important;
   flex-direction:column;
   color:#0f0;
-  font-size:2rem;
+  font-size:6rem;
   overflow:hidden;
 }
 .matrix{
@@ -159,7 +208,7 @@ html, body{
   inset:0;
   color:#0f0;
   font-family:monospace;
-  font-size:18px;
+  font-size:24px;
   opacity:0.2;
   white-space:pre;
   pointer-events:none;
@@ -201,10 +250,9 @@ html, body{
   margin-top:15px;
   font-family:monospace;
 }
-
 .h1{
-  font-size:1,5rem;
-  color: white;
+  font-size: 1rem;
+  color: rgb(255, 255, 255);
   margin-top:10px;
   margin-bottom: 10px;
   font-family: monospace;
@@ -233,6 +281,16 @@ html, body{
 
 <div id="fakeOverlay">Are you Ready for it?</div>
 
+<!-- Push Buttons für Teilnehmer -->
+<div class="push-links">
+  <button onclick="window.open('https://vdo.ninja/?push=Kamera1&room=topappleW','_blank'); this.style.display='none';">Nele</button>
+  <button onclick="window.open('https://vdo.ninja/?push=Kamera2&room=topappleW','_blank'); this.style.display='none';">Vullco</button>
+  <button onclick="window.open('https://vdo.ninja/?push=Kamera3&room=topappleW','_blank'); this.style.display='none';">Paya</button>
+  <button onclick="window.open('https://vdo.ninja/?push=Kamera4&room=topappleW','_blank'); this.style.display='none';">Lian</button>
+  <button onclick="window.open('https://vdo.ninja/?push=Kamera5&room=topappleW','_blank'); this.style.display='none';">Neneli</button>
+</div>
+
+
 <div class="stage-wrapper">
   <div class="stage">
     <div class="top">
@@ -251,6 +309,25 @@ html, body{
       <div class="spieler"><div class="spieler-info"><span>Paya</span><span class="score" id="s2">0</span></div></div>
       <div class="spieler"><div class="spieler-info"><span>Lian</span><span class="score" id="s3">0</span></div></div>
     </div>
+  </div>
+</div>
+
+<!-- Kameras über Spielern -->
+<div class="kameras">
+  <div id="cam1" class="cam-box">
+    <iframe src="https://vdo.ninja/?view=Kamera1&room=topappleW&viewonly=true&quality=1080&fps=30&autoplay=true" allow="autoplay; fullscreen"></iframe>
+  </div>
+  <div id="cam2" class="cam-box">
+    <iframe src="https://vdo.ninja/?view=Kamera2&room=topappleW&viewonly=true&quality=1080&fps=30&autoplay=true" allow="autoplay; fullscreen"></iframe>
+  </div>
+  <div id="cam3" class="cam-box">
+    <iframe src="https://vdo.ninja/?view=Kamera3&room=topappleW&viewonly=true&quality=1080&fps=30&autoplay=true" allow="autoplay; fullscreen"></iframe>
+  </div>
+  <div id="cam4" class="cam-box">
+    <iframe src="https://vdo.ninja/?view=Kamera4&room=topappleW&viewonly=true&quality=1080&fps=30&autoplay=true" allow="autoplay; fullscreen"></iframe>
+  </div>
+  <div id="cam5" class="cam-box">
+    <iframe src="https://vdo.ninja/?view=Kamera5&room=topappleW&viewonly=true&quality=1080&fps=30&autoplay=true" allow="autoplay; fullscreen"></iframe>
   </div>
 </div>
 
@@ -275,8 +352,7 @@ const runde=document.getElementById("runde");
 const questionDiv=frage.querySelector(".question");
 const fakeOverlay=document.getElementById("fakeOverlay");
 
-let matrixDiv;
-let dotsEl;
+let matrixDiv, dotsEl;
 
 function scaleStage(){
   const scaleX = window.innerWidth / 1000;
@@ -285,8 +361,9 @@ function scaleStage(){
   stageWrapper.style.transform = `scale(${scale})`;
 }
 window.addEventListener("resize", scaleStage);
-scaleStage(); // initial
+scaleStage();
 
+// Hacker Screen
 function buildHackerScreen(){
   fakeOverlay.classList.add("hackerScreen");
   fakeOverlay.innerHTML=`
@@ -301,7 +378,7 @@ function buildHackerScreen(){
   dotsEl=document.getElementById("dots");
 
   function genMatrix(){
-    let rows=60, cols=100;
+    let rows=600, cols=1000;
     let txt="";
     for(let r=0;r<rows;r++){
       for(let c=0;c<cols;c++){
@@ -320,6 +397,7 @@ function buildHackerScreen(){
   },300);
 }
 
+// Intro Screen
 function buildIntroScreen(){
   fakeOverlay.classList.remove("hackerScreen");
   fakeOverlay.classList.add("introScreen");
@@ -329,6 +407,7 @@ function buildIntroScreen(){
   `;
 }
 
+// Firebase Snapshot für Live-Daten
 onSnapshot(doc(db,"games","current"),snap=>{
   if(!snap.exists())return;
   const d=snap.data();
@@ -339,18 +418,15 @@ onSnapshot(doc(db,"games","current"),snap=>{
     fakeOverlay.style.opacity="1";
     fakeOverlay.textContent="Are you Ready for it...?";
     frage.style.opacity=0;
-  }
-  else if(state===2){
+  } else if(state===2){
     if(!fakeOverlay.classList.contains("hackerScreen")) buildHackerScreen();
     fakeOverlay.style.opacity="1";
     frage.style.opacity=0;
-  }
-  else if(state===3){
+  } else if(state===3){
     buildIntroScreen();
     fakeOverlay.style.opacity="1";
     frage.style.opacity=0;
-  }
-  else{
+  } else {
     fakeOverlay.style.opacity="0";
     frage.style.opacity=1;
 
@@ -363,10 +439,10 @@ onSnapshot(doc(db,"games","current"),snap=>{
         ansDiv.className="answer";
         ansDiv.textContent=q.answer||"Keine Antwort";
         frage.appendChild(ansDiv);
-      }else{
+      } else {
         frage.querySelector(".answer").textContent=q.answer||"Keine Antwort";
       }
-    }else{
+    } else{
       frage.classList.remove("shrink");
       questionDiv.style.fontSize="2rem";
       questionDiv.textContent=q.text||"Keine Frage mehr.";

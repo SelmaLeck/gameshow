@@ -2,31 +2,31 @@
 <html lang="de">
 <head>
   <meta charset="utf-8">
-  <title>Gameshow — Admin</title>
+  <title>Controls</title>
   <style>
     body{margin:0;font-family:sans-serif;background:#0a0710;color:#d1c9ff}
-    header{padding:20px;background:#120c1f;color:#4219e5;text-align:center}
-    .controls{max-width:600px;margin:20px auto;text-align:center}
-    button{margin:5px;padding:10px 20px;border-radius:8px;border:none;background:#241b36;color:#d1c9ff;cursor:pointer}
-    .spieler{margin:10px 0}
-    .spieler span{margin:0 10px;font-weight:bold;color:#9f86ff}
+    header{padding:15px;background:#120c1f;color:#3e084b;text-align:center}
+    .controls{max-width:600px;margin:20px auto;text-align:center; font-size: 20px}
+    button{margin:17px;padding:10px 20px;border-radius:8px;border:none;background:#241b36;color:#d1c9ff;cursor:pointer; font-size: 20px;}
+    .spieler{margin:20px 0; font-size: 30px;}
+    .spieler span{margin:0 10px;font-weight:bold;color:#9f86ff; font-size: 25px;}
   </style>
 </head>
 <body>
   <header><h1>Admin</h1></header>
 
   <div class="controls">
-    <button id="init">Init</button>
+    <button id="init">zuerst hier drücki bitti</button>
     <button id="prev">◀ Zurück</button>
-    <button id="next">Weiter ▶</button>
-    <button id="reveal">Aufdecken</button>
-    <button id="switchShow">Show wechseln</button>      
+    <button id="next">nächste ▶</button>
+    <button id="reveal">Lösung</button>
+    <button id="switchShow">Fake seiten switchen</button>      
 
     <h3>Punkte</h3>
-    <div class="spieler" data-i="0">Spieler 1 <button class="minus">-</button><span id="ps0">0</span><button class="plus">+</button></div>
-    <div class="spieler" data-i="1">Spieler 2 <button class="minus">-</button><span id="ps1">0</span><button class="plus">+</button></div>
-    <div class="spieler" data-i="2">Spieler 3 <button class="minus">-</button><span id="ps2">0</span><button class="plus">+</button></div>
-    <div class="spieler" data-i="3">Spieler 4 <button class="minus">-</button><span id="ps3">0</span><button class="plus">+</button></div>
+    <div class="spieler" data-i="0">Nele <button class="minus">-</button><span id="ps0">0</span><button class="plus">+</button></div>
+    <div class="spieler" data-i="1">Vullco <button class="minus">-</button><span id="ps1">0</span><button class="plus">+</button></div>
+    <div class="spieler" data-i="2">Paya <button class="minus">-</button><span id="ps2">0</span><button class="plus">+</button></div>
+    <div class="spieler" data-i="3">Lian <button class="minus">-</button><span id="ps3">0</span><button class="plus">+</button></div>
   </div>
 
   <script type="module">
@@ -62,7 +62,7 @@
         roundName:"1",
         fakeState:1, // Start bei Willkommen
         questions:[
-          {text:"Frage 1: Hauptstadt von Frankreich?",answer:"Paris"},
+          {text:"Frage 1: Frankreich?",answer:"Paris"},
           {text:"Frage 2: 2+2=?",answer:"4"},
           {text:"Frage 3: Farbe des Himmels?",answer:"Blau"}
         ]
